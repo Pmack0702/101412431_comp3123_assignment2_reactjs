@@ -1,24 +1,64 @@
-import logo from './logo.svg';
 import './App.css';
 import { Login } from './user_components/Login';
 import { Signup } from './user_components/Signup';
+import { AuthProvider } from "./AuthContext";
 import { EmployeeList } from './EmployeeList';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-
-
+import { ViewById } from './employee_components/ViewById';
+import { AddEmployee } from './employee_components/AddEmployee';
+import { UpdateEmployee } from './employee_components/UpdateEmployee';
+import ProtectedRoute from './ProtectedRoute';
+import Dashboard from './homepage_components/dashboard';
 
 function App() {
   return (
-    <Router>
-      
-      <Routes>
-        <Route path="/login" element={<Login/>} />
-        {/* <Route path="/login" element={<Login/>} /> */}
-        <Route path ="/signup" element={<Signup/>} />
-        <Route path ="/" element={<EmployeeList/>} />
+    <AuthProvider>
+      <Router>
+        <Routes>
+          {/* Public Routes */}
+          <Route path='/' element={<Dashboard />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
 
-      </Routes>
-    </Router>
+          {/* Protected Routes */}
+          <Route
+            path="/employeelist"
+            element={
+              <ProtectedRoute>
+                <EmployeeList />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employees/:id"
+            element={
+              <ProtectedRoute>
+                <ViewById />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employees/AddEmployee"
+            element={
+              <ProtectedRoute>
+                <AddEmployee />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employees/:id/UpdateEmployee"
+            element={
+              <ProtectedRoute>
+                <UpdateEmployee />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Fallback Route */}
+          <Route path="*" element={<h1>404: Page Not Found</h1>} />
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 }
 

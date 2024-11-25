@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { useNavigate } from "react-router-dom";
+import apiClient from '../apiClient';
 
 export const Signup = () => {
 
@@ -24,14 +25,40 @@ export const Signup = () => {
         if (name === 'password') setPassword(value);
       };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault(); // Prevents page refresh
-        setSubmitted(true);
-        console.log("Form Data: " + { username, email, password });
+        console.log("Form Data: ", { username, email, password });
+
+        const signup = {
+          username: username,
+          email: email,
+          password: password
+        }
+
+        try {
+
+          const token = localStorage.getItem('token');
+
+          const response = await apiClient.post('/api/v1/user/signup', signup, {
+            headers: { Authorization: `Bearer ${token}`},
+          })
+          console.log(response.data)
+
+          setSubmitted(true);
+
+          // Reset form fields
+          setUsername("")
+          setEmail("")
+          setPassword("")
+          
+        } catch (error) {
+          console.log("Error: ", error.message)
+          
+        }
 
         // Redirect to login page after successful signup
         setTimeout(() => {
-            navigate('/login');
+            navigate('/');
         }, 2000);
 
 

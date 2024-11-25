@@ -2,6 +2,9 @@ import 'bootstrap/dist/css/bootstrap.css';
 import React, { useState } from 'react'
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
+import apiClient from '../apiClient';
+import TextField from '@mui/material/TextField';
+import Alert from '@mui/material/Alert';
 
 export const Login = () => {
 
@@ -10,11 +13,13 @@ export const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("")
     const [submitted, setSubmitted] = useState(false);
+    const [message, setMessage] = useState(""); // To display success/error messages
 
 
-    const navigate = useNavigate();
 
+    const navigate = useNavigate(); // create a object for navigation
 
+    
     const handleInput = (e) => {
         const { name, value } = e.target; // Get field name and value
         if (name === 'username') setUsername(value);
@@ -23,49 +28,104 @@ export const Login = () => {
       };
       
 
-    
-    const handleSubmit = (e) => {
-        e.preventDefault(); // this will the refresh page, updates implicitly
-        console.log({ username, email, password });
 
+   // Handle form submission
+  const handleLogin = async (e) => {
+    e.preventDefault(); // Prevent default form refresh
+    setMessage(""); // Clear previous messages
+
+    try {
+      const response = await apiClient.post("/api/v1/user/login", {
+        email,
+        password,
+      });
+
+      if (response.status === 200) {
+        setMessage("Login successful!");
+
+        // Store the token for authentication persistence
+        localStorage.setItem("token", response.data.token);
+
+        // Navigate to the protected route after successful login after 2 seconds
         setTimeout(() => {
-        setSubmitted(true);
-        navigate("/employeelist");
-        }, 2000 )
+          setSubmitted(true);
+          navigate("/employeelist");
+        }, 1000)
+      }
+    } catch (error) {
+      // Handle errors from API response
+      if (error.response && error.response.data) {
+        setMessage(error.response.data.message); // Display backend error message
+      } else {
+        setMessage("An error occurred while logging in.");
+      }
     }
+  };
+
 
   return (
-    <div className='login-container'>
-        <h2>Login</h2>
-        <form onSubmit={handleSubmit}>
-
-            <div className='form-row'>
-                <div className='form-group'>
-                    <label>UserName</label>
-                    <input type="text" name="username" placeholder="Enter your username" value={username} onChange={handleInput} required />
-                </div>
-                <div className='form-group'>
-                    <label>Email</label>
-                    <input type="email" name="email" placeholder="Enter email" value={email} onChange={handleInput} required />
-                </div>
-
-                <div className='form-group'>
-                    <label>Password</label>
-                    <input type="password" name="password" placeholder="Enter Password" value={password} onChange={handleInput} required />
-                </div>
-                
-            </div>
-
-            <Button variant="contained" type='submit'>Login</Button>
-            {/* <button type="submit">Login</button> */}
-
+    <div className="container d-flex justify-content-center align-items-center vh-100">
+      <div className="card p-4 shadow-lg" style={{ width: '400px' }}>
+        <h2 className="text-center mb-4">Login</h2>
+        <form onSubmit={handleLogin}>
+          <div className="mb-3">
+            <TextField
+              fullWidth
+              label="Username"
+              name="username"
+              variant="outlined"
+              value={username}
+              onChange={handleInput}
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <TextField
+              fullWidth
+              label="Email"
+              type="email"
+              name="email"
+              variant="outlined"
+              value={email}
+              onChange={handleInput}
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <TextField
+              fullWidth
+              label="Password"
+              type="password"
+              name="password"
+              variant="outlined"
+              value={password}
+              onChange={handleInput}
+              required
+            />
+          </div>
+          <div className="text-center">
+            <Button variant="contained" color="primary" type="submit" fullWidth>
+              Login
+            </Button>
+          </div>
         </form>
-        {submitted && <p className="mt-3 text-success">Form Submitted Successfully!</p>}
 
-        
-        <p className="mt-3">Don't have an account? <a href="/signup" className="text-primary">Sign up</a></p>
+        {message && (
+          <div className="mt-3">
+            <Alert severity={message === "Login successful!" ? "success" : "error"}>{message}</Alert>
+          </div>
+        )}
 
+        {submitted && (
+          <Alert severity="success" className="mt-3">
+            Form Submitted Successfully!
+          </Alert>
+        )}
 
+        <p className="text-center mt-3">
+          Don't have an account? <a href="/signup" className="text-primary">Sign up</a>
+        </p>
+      </div>
     </div>
-  )
+  );
 }
