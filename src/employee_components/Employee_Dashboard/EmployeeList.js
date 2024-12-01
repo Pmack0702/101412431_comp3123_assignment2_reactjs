@@ -2,10 +2,10 @@ import 'bootstrap/dist/css/bootstrap.css';
 import React, { useEffect, useState } from 'react';
  import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
-import {Alert, TextField} from '@mui/material';
+import { TextField } from '@mui/material';
+import { Alert } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
-import apiClient from './apiClient'; // Import the configured Axios instance
-
+import apiClient from '../../apiClient/apiClient';  // Import the configured Axios instance
 
 
 export const EmployeeList = () => {
@@ -132,15 +132,20 @@ export const EmployeeList = () => {
 
         <div className="container py-4">
 
-        <h1 className="text-center mb-4">Employee Dashboard</h1>
-    
-          <div className="d-flex justify-content-between align-items-center mb-4">
-            <Button variant="contained" color="primary" onClick={handleAddButton}>
-              Add Employee
-            </Button>
-          </div>
-    
-          <form onSubmit={handleSearch} className="mb-4 d-flex gap-3 flex-wrap">
+            
+        <h1 className="text-center mb-4 bg-dark text-white py-5">Employee Dashboard</h1>
+
+        {success && <Alert severity="success" className="mb-3">{success}</Alert>}
+        {error && <Alert severity="error" className="mb-3">{error}</Alert>}
+
+        
+        <div className="d-flex justify-content-between align-items-center mb-4">
+        <Button variant="contained" color="primary" onClick={handleAddButton}>
+            Add Employee
+          </Button>
+
+          <form onSubmit={handleSearch} className="d-flex gap-3 ">
+            
             <TextField
               label="Department"
               name="department"
@@ -164,17 +169,24 @@ export const EmployeeList = () => {
                 </MenuItem>
               ))}
             </TextField>
-            <Button type="submit" variant="contained" color="primary">
-              Search
-            </Button>
-            <Button type="button" variant="outlined" color="secondary" onClick={handleRefresh}>
-              Reset
-            </Button>
+
+              <Button type="submit" variant="contained" color="primary" className='px-5'>
+                Search
+              </Button>
+              <Button type="button" variant="outlined" color="secondary" onClick={handleRefresh} className='px-5'>
+                Reset
+              </Button>
+              
           </form>
+
+        </div>
     
-          {error && <p className="text-danger">{error}</p>}
+          
     
+  
+
           <table className="table table-striped">
+
             <thead>
               <tr>
                 <th>First Name</th>
@@ -183,6 +195,7 @@ export const EmployeeList = () => {
                 <th>Actions</th>
               </tr>
             </thead>
+
             <tbody>
               {employeelist.map((employee) => (
                 <tr key={employee._id}>
@@ -214,7 +227,6 @@ export const EmployeeList = () => {
               ))}
             </tbody>
           </table>
-          {success && <Alert severity="success" className="mb-3">{success}</Alert>} {/* Success message */}
 
         </div>
     );

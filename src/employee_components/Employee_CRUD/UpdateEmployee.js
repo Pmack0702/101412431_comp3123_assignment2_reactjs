@@ -10,7 +10,7 @@ import {
   Card,
   CardContent,
 } from '@mui/material';
-import apiClient from '../apiClient';
+import apiClient from '../../apiClient/apiClient';
 
 export const UpdateEmployee = () => {
     // Fetch the id from the URL

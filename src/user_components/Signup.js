@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { useNavigate } from "react-router-dom";
-import apiClient from '../apiClient';
+import apiClient from '../apiClient/apiClient';
 
 export const Signup = () => {
 

@@ -11,8 +11,8 @@ const Dashboard = () => {
     navigate("/login");
   }
 
-  const singupbtn = () => {
-    navigate("singup");
+  const signupbtn = () => {
+    navigate("signup");
   }
 
   return (
@@ -32,7 +32,7 @@ const Dashboard = () => {
         <Button
           variant="outlined"
           color="secondary"
-          onClick={singupbtn}
+          onClick={signupbtn}
         >
           Signup
         </Button>

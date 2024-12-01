@@ -13,7 +13,7 @@ import {
   Alert,
   Box,
 } from '@mui/material';
-import apiClient from '../apiClient';
+import apiClient from '../../apiClient/apiClient';
 
 
 export const AddEmployee = () => {

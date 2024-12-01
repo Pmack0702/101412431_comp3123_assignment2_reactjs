@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import apiClient from '../apiClient';
+import apiClient from '../../apiClient/apiClient';
 import { Card, CardContent, Typography, CircularProgress, Alert } from '@mui/material';
 import Button from '@mui/material/Button';
 
@@ -98,7 +98,7 @@ export const ViewById = () => {
               </Typography>
             </div>
           </div>
-          
+
           <div className="text-center mt-4">
             <Button
               variant="contained"
@@ -108,13 +108,7 @@ export const ViewById = () => {
             >
               Back
             </Button>
-            <Button
-              variant="outlined"
-              color="secondary"
-              onClick={() => alert('Edit functionality coming soon!')}
-            >
-              Edit Employee
-            </Button>
+            
           </div>
         </CardContent>
       </Card>
