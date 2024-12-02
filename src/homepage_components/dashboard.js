@@ -20,9 +20,7 @@ const Dashboard = () => {
         className="navbar navbar-expand-lg px-4"
         style={{ backgroundColor: '#87CEFA' }} // Light blue background
       >
-        <a className="navbar-brand fw-bold text-dark" href="/">
-          Employee Dashboard
-        </a>
+
         <div className="collapse navbar-collapse justify-content-end">
           <button
             className="btn btn-outline-dark mx-2"
