@@ -18,9 +18,6 @@ export const Login = () => {
     const [message, setMessage] = useState(""); // To display success/error messages
     const { login } = useContext(AuthContext); // Access login function from AuthContext
 
-
-
-
     const navigate = useNavigate(); // create a object for navigation
 
     

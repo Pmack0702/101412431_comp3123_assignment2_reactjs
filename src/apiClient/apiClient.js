@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: 'http://localhost:3000', // Backend URL
+  baseURL: 'https://assignment-01-five.vercel.app/', // Backend URL
 });
 
 // Add Authorization header dynamically
