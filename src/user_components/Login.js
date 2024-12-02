@@ -1,10 +1,12 @@
 import 'bootstrap/dist/css/bootstrap.css';
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 import apiClient from '../apiClient/apiClient';
 import TextField from '@mui/material/TextField';
 import Alert from '@mui/material/Alert';
+import { AuthContext } from "../authentication/AuthContext";
+
 
 export const Login = () => {
 
@@ -14,6 +16,8 @@ export const Login = () => {
     const [password, setPassword] = useState("")
     const [submitted, setSubmitted] = useState(false);
     const [message, setMessage] = useState(""); // To display success/error messages
+    const { login } = useContext(AuthContext); // Access login function from AuthContext
+
 
 
 
@@ -43,8 +47,10 @@ export const Login = () => {
       if (response.status === 200) {
         setMessage("Login successful!");
 
+        login(response.data.token); // Update state and store token
+
         // Store the token for authentication persistence
-        localStorage.setItem("token", response.data.token);
+        // localStorage.setItem("token", response.data.token);
 
         // Navigate to the protected route after successful login after 2 seconds
         setTimeout(() => {

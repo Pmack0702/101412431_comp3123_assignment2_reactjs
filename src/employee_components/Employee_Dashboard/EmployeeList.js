@@ -1,11 +1,13 @@
 import 'bootstrap/dist/css/bootstrap.css';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
  import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 import { TextField } from '@mui/material';
 import { Alert } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import apiClient from '../../apiClient/apiClient';  // Import the configured Axios instance
+import { AuthContext } from '../../authentication/AuthContext'; // Import AuthContext
+
 
 
 export const EmployeeList = () => {
@@ -15,6 +17,7 @@ export const EmployeeList = () => {
     const [searchParams, setSearchParams] = useState({ department: '', position: '' });
     const [success, setSuccess] = useState(false);
     const navigate = useNavigate();
+    const { logout } = useContext(AuthContext); // Get logout from AuthContext
 
     const positions = ['HR', 'Manager', 'Employee', 'Intern']; // Predefined options
 
@@ -52,6 +55,10 @@ export const EmployeeList = () => {
 
     }, []); // It runs only once because there is no dependencies specified, (The empty dependency array ensures this runs once after initial render)
 
+    const handleLogout = () => {
+      logout(); // Call the logout function from AuthContext
+      navigate('/login'); // Redirect to login page
+    };
 
     // Handle a Delete action
     const handleDelete = async (id) => {
@@ -134,6 +141,7 @@ export const EmployeeList = () => {
 
             
         <h1 className="text-center mb-4 bg-dark text-white py-5">Employee Dashboard</h1>
+        
 
         {success && <Alert severity="success" className="mb-3">{success}</Alert>}
         {error && <Alert severity="error" className="mb-3">{error}</Alert>}
@@ -143,6 +151,9 @@ export const EmployeeList = () => {
         <Button variant="contained" color="primary" onClick={handleAddButton}>
             Add Employee
           </Button>
+          <Button variant="contained" color="secondary" onClick={handleLogout}>
+          Logout
+        </Button>
 
           <form onSubmit={handleSearch} className="d-flex gap-3 ">
             
