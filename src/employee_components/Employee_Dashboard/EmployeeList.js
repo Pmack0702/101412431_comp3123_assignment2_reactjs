@@ -60,27 +60,30 @@ export const EmployeeList = () => {
       navigate('/login'); // Redirect to login page
     };
 
-    // Handle a Delete action
     const handleDelete = async (id) => {
-        try {
-            const token = localStorage.getItem('token'); // Get the token from localStorage
-            const response = await apiClient.delete(`/api/v1/emp/employees/${id}`, {
-                headers: { Authorization: `Bearer ${token}` },
-            });
-    
-            console.log('Delete response:', response.data); // Debugging
-    
-            setEmployeeList(employeelist.filter((employee) => employee._id !== id)); // Update the list
-            setSuccess('Employee deleted successfully!'); // Set success message
-    
-            // Clear the message after 3 seconds
-            setTimeout(() => setSuccess(null), 3000);
-        } catch (err) {
-            console.error('Error deleting employee:', err);
-            setSuccess('Failed to delete the employee.'); // Set error message
-            setTimeout(() => setSuccess(null), 3000);
-        }
-    };
+      const confirmDelete = window.confirm("Are you sure you want to delete this employee?");
+      if (!confirmDelete) return; // If the user cancels, do nothing
+  
+      try {
+          const token = localStorage.getItem('token'); // Get the token from localStorage
+          const response = await apiClient.delete(`/api/v1/emp/employees/${id}`, {
+              headers: { Authorization: `Bearer ${token}` },
+          });
+  
+          console.log('Delete response:', response.data); // Debugging
+  
+          setEmployeeList(employeelist.filter((employee) => employee._id !== id)); // Update the list
+          setSuccess('Employee deleted successfully!'); // Set success alert
+  
+          // Clear the alert message after 3 seconds
+          setTimeout(() => setSuccess(null), 3000);
+      } catch (err) {
+          console.error('Error deleting employee:', err);
+          setError('Failed to delete the employee.'); // Set error alert
+          setTimeout(() => setError(null), 3000);
+      }
+  };
+  
     
 
       // Handle search form submission
@@ -140,20 +143,20 @@ export const EmployeeList = () => {
         <div className="container py-4">
 
             
-        <h1 className="text-center mb-4 bg-dark text-white py-5">Employee Dashboard</h1>
+          <h1 className="text-center mb-4 bg-dark text-white py-5">Employee Dashboard</h1>
         
 
-        {success && <Alert severity="success" className="mb-3">{success}</Alert>}
-        {error && <Alert severity="error" className="mb-3">{error}</Alert>}
+          {success && <Alert severity="success" className="mb-3">{success}</Alert>}
+          {error && <Alert severity="error" className="mb-3">{error}</Alert>}
 
         
-        <div className="d-flex justify-content-between align-items-center mb-4">
-        <Button variant="contained" color="primary" onClick={handleAddButton}>
-            Add Employee
+          <div className="d-flex justify-content-between align-items-center mb-4">
+          <Button variant="contained" color="primary" onClick={handleAddButton}>
+              Add Employee
+            </Button>
+            <Button variant="contained" color="secondary" onClick={handleLogout}>
+            Logout
           </Button>
-          <Button variant="contained" color="secondary" onClick={handleLogout}>
-          Logout
-        </Button>
 
           <form onSubmit={handleSearch} className="d-flex gap-3 ">
             
